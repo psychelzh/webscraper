@@ -1,6 +1,7 @@
 library(targets)
 future::plan(future.callr::callr)
 tar_option_set(packages = "rvest")
+purrr::walk(fs::dir_ls("R"), source, encoding = "UTF-8")
 list(
   tarchetypes::tar_file_read(
     words,
@@ -9,13 +10,7 @@ list(
   ),
   tar_target(
     counts,
-    sprintf("http://bcc.blcu.edu.cn/zh/search/0/%s", words) |>
-      URLencode() |>
-      read_html() |>
-      html_node("p+ p") |>
-      html_text2() |>
-      stringr::str_extract("(?<=共\\s)\\d+(?=\\s个)") |>
-      as.integer(),
+    get_count(words),
     pattern = map(words)
   ),
   tar_target(
