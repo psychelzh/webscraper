@@ -6,7 +6,7 @@ list(
   tarchetypes::tar_file_read(
     words,
     "words.txt",
-    read = readLines(!!.x)
+    read = readLines(!!.x, encoding = "UTF-8")
   ),
   tar_target(
     counts,
